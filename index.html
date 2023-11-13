@@ -85,11 +85,23 @@
         </form>
     </main>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
-	<script>
+    <script>
     let tg = window.Telegram.WebApp;
     let add_new_quest = document.getElementById("add-new-quest");
 
     tg.expand();
+
+    const hideMobileKeyboardOnReturn = (keyboardEvent) => {
+	element.addEventListener('keyup', (keyboardEvent) => {
+           if (keyboardEvent.code === 'Enter') {
+              element.blur();
+	   }
+	});
+    };
+	
+    document.querySelementectorAll('[type=text]').forEach((element) => {
+        hideMobileKeyboardOnReturn(element);
+    });
 
     add_new_quest.addEventListener("click", () => {
       
