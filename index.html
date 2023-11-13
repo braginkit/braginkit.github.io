@@ -91,18 +91,6 @@
 
     tg.expand();
 
-    const hideMobileKeyboardOnReturn = (keyboardEvent) => {
-	element.addEventListener('keyup', (keyboardEvent) => {
-           if (keyboardEvent.code === 'Enter') {
-              element.blur();
-	   }
-	});
-    };
-	
-    document.querySelementectorAll('[type=text]').forEach((element) => {
-        hideMobileKeyboardOnReturn(element);
-    });
-
     add_new_quest.addEventListener("click", () => {
       
       document.getElementById("error").innerText = "";
