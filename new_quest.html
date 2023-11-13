@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="shortcut icon" href="#">
+    <title>Форма создания нового квеста</title>
+  </head>
+  <style>
+    body {
+      font-family: 'Montserrat', sans-serif;
+      font-weight: 200;
+      color: var(--tg-theme-text-color);
+      background: var(--tg-theme-bg-color);
+    }
+
+    textarea[type=text] {
+      width: 100%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      display: block;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      resize: none;
+    }
+
+    input[type=text], input[type=datetime-local], input[type=number] {
+      width: 100%;
+      padding: 12px 20px;
+      margin: 8px 0;
+      display: block;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+
+    label[name="error"] {
+      color: red;
+    }
+    
+    button {
+      width: 100%;
+      background: var(--tg-theme-text-color);
+      color: var(--tg-theme-button-color);
+      padding: 14px 20px;
+      margin: 8px 0;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    
+    button:hover {
+      background: var(--tg-theme-secondaty-bg-color);
+    }
+  </style>
+  <body>
+    <main>
+        <h1>Новый квест</h1>
+        <form id="form">
+
+          <label for="title">Название квеста</label>
+          <input type="text" id="title" name="title">
+        
+          <label for="description">Описание квеста</label>
+          <textarea type="text" id="description" name="description" cols="40" rows="5"></textarea>
+        
+          <label for="location">Локация</label>
+          <input type="text" id="location" name="location">
+
+          <label for="start-time">Дата и время</label>
+          <input type="datetime-local" id="start-time" name="start-time">
+
+          <label for="cost">Цена</label>
+          <input type="number" id="cost" name="cost">
+
+          <label for="max-guests">Кол-во мест</label>
+          <input type="number" id="max-guests" name="max-guests">
+
+          <label for="chat-link">Ссылка на чат тг</label>
+          <input type="text" id="chat-link" name="chat-link">
+
+          <label id="error" name="error"></label>
+
+          <button type="button" id="add-new-quest">Создать</button>
+
+        </form>
+    </main>
+  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+	<script>
+    let tg = window.Telegram.WebApp;
+    let add_new_quest = document.getElementById("add-new-quest");
+
+    tg.expand();
+
+    add_new_quest.addEventListener("click", () => {
+      
+      document.getElementById("error").innerText = "";
+      let quest_title = document.getElementById("title").value;
+      let quest_description = document.getElementById("description").value;
+      let quest_location = document.getElementById("location").value;
+      let quest_start_time = document.getElementById("start-time").value;
+      let quest_cost = document.getElementById("cost").value;
+      let quest_max_guests = document.getElementById("max-guests").value;
+      let quest_chat_link = document.getElementById("chat-link").value;
+
+      if(quest_title.length < 5) {
+        document.getElementById("error").innerText = "Ошибка в названии";
+        return;
+      }
+      if(quest_description.length < 5) {
+        document.getElementById("error").innerText = "Ошибка в описании";
+        return;
+      }
+      if(quest_location.length < 5) {
+        document.getElementById("error").innerText = "Ошибка в локации";
+        return;
+      }
+      if(new Date() >= new Date(quest_start_time)) {
+        document.getElementById("error").innerText = "Ошибка в дате или времени";
+        return;
+      }
+      if(quest_cost <= 0) {
+        document.getElementById("error").innerText = "Ошибка в цене";
+        return;
+      }
+      if(quest_max_guests < 3) {
+        document.getElementById("error").innerText = "Ошибка в кол-ве мест";
+        return;
+      }
+      if(quest_chat_link.length < 5) {
+        document.getElementById("error").innerText = "Ошибка в ссылке на чат";
+        return;
+      }
+
+      let data = {
+        quest_title: quest_title,
+        quest_description: quest_description,
+        quest_location: quest_location,
+        quest_start_time: quest_start_time,
+        quest_cost: quest_cost,
+        quest_max_guests: quest_max_guests,
+        quest_chat_link: quest_chat_link
+      }
+
+      tg.sendData(JSON.stringify(data));
+      tg.close();
+    });
+
+  </script>
+  </body>
+</html>
